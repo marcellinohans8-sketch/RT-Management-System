@@ -13,3 +13,4 @@ Route::apiResource('payments', PaymentController::class);
 Route::apiResource('expenses', ExpenseController::class);
 Route::apiResource('resident-histories', ResidentHistoryController::class);
 Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
