@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Expense extends Model
+class FeeSetting extends Model
 {
     protected $fillable = [
-        'title',
-        'category',
-        'description',
+        'type',
         'amount',
-        'expense_date',
     ];
 }

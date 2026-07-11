@@ -9,28 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up(): void
+ public function up(): void
 {
-    Schema::create('expenses', function (Blueprint $table) {
+    Schema::create('fee_settings', function (Blueprint $table) {
 
         $table->id();
 
-        $table->string('title');
-
-        $table->enum('category',[
+        $table->enum('type',[
             'security',
-            'cleaning',
-            'road',
-            'drainage',
-            'maintenance',
-            'other'
+            'cleaning'
         ]);
 
-        $table->text('description')->nullable();
-
         $table->decimal('amount',10,2);
-
-        $table->date('expense_date');
 
         $table->timestamps();
     });
@@ -41,6 +31,6 @@ public function up(): void
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('fee_settings');
     }
 };

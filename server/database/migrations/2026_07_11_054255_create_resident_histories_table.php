@@ -9,12 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up(): void
+  public function up(): void
 {
     Schema::create('resident_histories', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('house_id')->constrained()->cascadeOnDelete();
-        $table->foreignId('resident_id')->constrained()->cascadeOnDelete();
+        $table->foreignId('house_id')
+            ->constrained()
+            ->cascadeOnDelete();
+        $table->foreignId('resident_id')
+            ->constrained()
+            ->cascadeOnDelete();
         $table->date('start_date');
         $table->date('end_date')->nullable();
         $table->timestamps();

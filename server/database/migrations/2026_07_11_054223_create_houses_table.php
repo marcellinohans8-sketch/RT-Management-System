@@ -9,12 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+public function up(): void
 {
     Schema::create('houses', function (Blueprint $table) {
         $table->id();
         $table->string('house_number')->unique();
-        $table->string('address');
+        $table->text('address');
+        $table->text('notes')->nullable();
         $table->enum('status', ['occupied', 'vacant'])->default('vacant');
         $table->timestamps();
     });

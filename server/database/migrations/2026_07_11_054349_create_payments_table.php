@@ -9,19 +9,40 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up(): void
+public function up(): void
 {
     Schema::create('payments', function (Blueprint $table) {
+
         $table->id();
-        $table->foreignId('resident_id')->constrained()->cascadeOnDelete();
-        $table->tinyInteger('month');
+
+        $table->foreignId('resident_id')
+            ->constrained()
+            ->cascadeOnDelete();
+
+        $table->unsignedTinyInteger('month');
+
         $table->year('year');
+
         $table->decimal('security_fee',10,2);
+
         $table->decimal('cleaning_fee',10,2);
+
         $table->decimal('total',10,2);
-        $table->date('paid_at');
-        $table->enum('status',['paid','unpaid'])->default('paid');
+
+        $table->enum('status',[
+            'paid',
+            'unpaid'
+        ])->default('unpaid');
+
+        $table->date('paid_at')->nullable();
+
         $table->timestamps();
+
+        $table->unique([
+            'resident_id',
+            'month',
+            'year'
+        ]);
     });
 }
 
