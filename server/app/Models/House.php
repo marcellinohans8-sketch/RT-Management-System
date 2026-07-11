@@ -10,8 +10,8 @@ class House extends Model
     protected $fillable = [
         'house_number',
         'address',
-        'notes',
         'status',
+        'notes',
     ];
 
     public function residentHistories(): HasMany
