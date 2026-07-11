@@ -3,47 +3,50 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreExpenseRequest;
+use App\Http\Requests\UpdateExpenseRequest;
+use App\Models\Expense;
 
 class ExpenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(
+            Expense::latest()->get()
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreExpenseRequest $request)
     {
-        //
+        $expense = Expense::create($request->validated());
+
+        return response()->json([
+            'message' => 'Expense created successfully',
+            'data' => $expense
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Expense $expense)
     {
-        //
+        return response()->json($expense);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateExpenseRequest $request, Expense $expense)
     {
-        //
+        $expense->update($request->validated());
+
+        return response()->json([
+            'message' => 'Expense updated successfully',
+            'data' => $expense
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Expense $expense)
     {
-        //
+        $expense->delete();
+
+        return response()->json([
+            'message' => 'Expense deleted successfully'
+        ]);
     }
 }
