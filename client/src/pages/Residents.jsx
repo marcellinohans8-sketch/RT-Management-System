@@ -1,5 +1,11 @@
+import Layout from "../components/Layout";
+
 function Residents() {
-  return <h1>Residents</h1>;
+  return (
+    <Layout>
+      <h1 className="text-3xl font-bold">Residents</h1>
+    </Layout>
+  );
 }
 
 export default Residents;

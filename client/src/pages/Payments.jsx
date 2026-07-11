@@ -1,5 +1,11 @@
+import Layout from "../components/Layout";
+
 function Payments() {
-  return <h1>Payments</h1>;
+  return (
+    <Layout>
+      <h1 className="text-3xl font-bold">Payments</h1>
+    </Layout>
+  );
 }
 
 export default Payments;
