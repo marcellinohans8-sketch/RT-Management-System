@@ -6,10 +6,10 @@ use App\Http\Controllers\Api\HouseController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\DashboardController;
-
+use App\Http\Controllers\Api\ResidentHistoryController;
 Route::apiResource('residents', ResidentController::class);
 Route::apiResource('houses', HouseController::class);
 Route::apiResource('payments', PaymentController::class);
 Route::apiResource('expenses', ExpenseController::class);
-
+Route::apiResource('resident-histories', ResidentHistoryController::class);
 Route::get('/dashboard', [DashboardController::class, 'index']);
