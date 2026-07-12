@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Resident extends Model
 {
-    protected $fillable = [
-        'full_name',
-        'ktp_number',
-        'resident_status',
-        'phone_number',
-        'is_married',
-    ];
+protected $fillable = [
+    'full_name',
+    'ktp_number',
+    'resident_status',
+    'phone_number',
+    'ktp_photo',
+    'is_married',
+];
 
     public function residentHistories(): HasMany
     {

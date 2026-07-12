@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreResidentRequest;
 use App\Http\Requests\UpdateResidentRequest;
 use App\Models\Resident;
-
+use Illuminate\Support\Facades\Storage;
 class ResidentController extends Controller
 {
     /**
@@ -22,16 +22,25 @@ class ResidentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreResidentRequest $request)
-    {
-        $resident = Resident::create($request->validated());
+public function store(StoreResidentRequest $request)
+{
+    $data = $request->validated();
 
-        return response()->json([
-            'message' => 'Resident created successfully',
-            'data' => $resident
-        ], 201);
+    $data['is_married'] = (bool) $data['is_married'];
+
+    if ($request->hasFile('ktp_photo')) {
+        $data['ktp_photo'] = $request
+            ->file('ktp_photo')
+            ->store('ktp', 'public');
     }
 
+    $resident = Resident::create($data);
+
+    return response()->json([
+        'message' => 'Resident created successfully',
+        'data' => $resident,
+    ], 201);
+}
     /**
      * Display the specified resource.
      */
@@ -43,15 +52,28 @@ class ResidentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateResidentRequest $request, Resident $resident)
-    {
-        $resident->update($request->validated());
+  public function update(UpdateResidentRequest $request, Resident $resident)
+{
+    $data = $request->validated();
 
-        return response()->json([
-            'message' => 'Resident updated successfully',
-            'data' => $resident
-        ]);
+    if ($request->hasFile('ktp_photo')) {
+
+        if ($resident->ktp_photo) {
+            Storage::disk('public')->delete($resident->ktp_photo);
+        }
+
+        $data['ktp_photo'] = $request
+            ->file('ktp_photo')
+            ->store('ktp', 'public');
     }
+
+    $resident->update($data);
+
+    return response()->json([
+        'message' => 'Resident updated successfully',
+        'data' => $resident,
+    ]);
+}
 
     /**
      * Remove the specified resource from storage.
