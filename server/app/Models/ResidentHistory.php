@@ -14,13 +14,13 @@ class ResidentHistory extends Model
         'end_date',
     ];
 
-    public function house(): BelongsTo
-    {
-        return $this->belongsTo(House::class);
-    }
+  public function resident()
+{
+    return $this->belongsTo(Resident::class);
+}
 
-    public function resident(): BelongsTo
-    {
-        return $this->belongsTo(Resident::class);
-    }
+public function house()
+{
+    return $this->belongsTo(House::class);
+}
 }
