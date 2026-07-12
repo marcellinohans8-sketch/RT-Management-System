@@ -18,4 +18,9 @@ class House extends Model
     {
         return $this->hasMany(ResidentHistory::class);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

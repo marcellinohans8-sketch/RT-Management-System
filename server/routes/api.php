@@ -17,3 +17,4 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
 Route::post('/payments/generate', [PaymentController::class, 'generateMonthlyBills']);
 Route::get('/reports/monthly', [ReportController::class, 'monthly']);
+Route::get('/reports/yearly', [ReportController::class, 'yearly']);

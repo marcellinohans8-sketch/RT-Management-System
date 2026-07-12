@@ -16,32 +16,32 @@ const menus = [
     icon: <FaHome />,
   },
   {
-    name: "Residents",
+    name: "Penghuni",
     path: "/residents",
     icon: <FaUsers />,
   },
   {
-    name: "Houses",
+    name: "Rumah",
     path: "/houses",
     icon: <FaHouseUser />,
   },
   {
-    name: "Resident History",
+    name: "Riwayat Hunian",
     path: "/resident-histories",
     icon: <FaHistory />,
   },
   {
-    name: "Payments",
+    name: "Pembayaran",
     path: "/payments",
     icon: <FaMoneyBillWave />,
   },
   {
-    name: "Expenses",
+    name: "Pengeluaran",
     path: "/expenses",
     icon: <FaWallet />,
   },
   {
-    name: "Reports",
+    name: "Laporan",
     path: "/reports",
     icon: <FaChartBar />,
   },
@@ -51,10 +51,10 @@ function Sidebar() {
   return (
     <aside className="w-64 min-h-screen bg-slate-900 text-white shadow-xl">
       <div className="p-6 border-b border-slate-700">
-        <h1 className="text-2xl font-bold text-center">RT Management</h1>
+        <h1 className="text-2xl font-bold text-center">Administrasi RT</h1>
 
         <p className="text-sm text-slate-400 text-center mt-1">
-          Administration System
+          Iuran dan Kas Warga
         </p>
       </div>
 
