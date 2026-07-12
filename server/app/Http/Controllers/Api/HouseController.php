@@ -15,12 +15,19 @@ class HouseController extends Controller
     public function index()
     {
         return response()->json(
-            House::latest()->get()
+            House::with([
+                'residentHistories' => function ($query) {
+                    $query->whereNull('end_date')
+                          ->with('resident');
+                }
+            ])
+            ->latest()
+            ->get()
         );
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource.
      */
     public function store(StoreHouseRequest $request)
     {
@@ -37,11 +44,18 @@ class HouseController extends Controller
      */
     public function show(House $house)
     {
-        return response()->json($house);
+        return response()->json(
+            $house->load([
+                'residentHistories' => function ($query) {
+                    $query->whereNull('end_date')
+                          ->with('resident');
+                }
+            ])
+        );
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource.
      */
     public function update(UpdateHouseRequest $request, House $house)
     {
@@ -54,7 +68,7 @@ class HouseController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource.
      */
     public function destroy(House $house)
     {
