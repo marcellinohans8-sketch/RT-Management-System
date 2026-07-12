@@ -6,6 +6,7 @@ function Residents() {
   const [residents, setResidents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingResident, setEditingResident] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const [form, setForm] = useState({
     full_name: "",
@@ -13,11 +14,8 @@ function Residents() {
     resident_status: "permanent",
     phone_number: "",
     is_married: false,
+    ktp_photo: null,
   });
-
-  useEffect(() => {
-    fetchResidents();
-  }, []);
 
   const fetchResidents = async () => {
     try {
@@ -28,8 +26,13 @@ function Residents() {
     }
   };
 
+  useEffect(() => {
+    fetchResidents();
+  }, []);
+
   const resetForm = () => {
     setEditingResident(null);
+    setPreview(null);
 
     setForm({
       full_name: "",
@@ -37,6 +40,7 @@ function Residents() {
       resident_status: "permanent",
       phone_number: "",
       is_married: false,
+      ktp_photo: null,
     });
   };
 
@@ -44,16 +48,36 @@ function Residents() {
     e.preventDefault();
 
     try {
+      const formData = new FormData();
+
+      formData.append("full_name", form.full_name);
+      formData.append("ktp_number", form.ktp_number);
+      formData.append("resident_status", form.resident_status);
+      formData.append("phone_number", form.phone_number);
+      formData.append("is_married", form.is_married ? 1 : 0);
+
+      if (form.ktp_photo) {
+        formData.append("ktp_photo", form.ktp_photo);
+      }
+
       if (editingResident) {
-        await api.put(`/residents/${editingResident.id}`, form);
+        formData.append("_method", "PUT");
+
+        await api.post(`/residents/${editingResident.id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       } else {
-        await api.post("/residents", form);
+        await api.post("/residents", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       }
 
       fetchResidents();
-
       setShowModal(false);
-
       resetForm();
     } catch (error) {
       console.error(error.response?.data || error);
@@ -69,7 +93,14 @@ function Residents() {
       resident_status: resident.resident_status,
       phone_number: resident.phone_number,
       is_married: resident.is_married,
+      ktp_photo: null,
     });
+
+    if (resident.ktp_photo) {
+      setPreview(`http://127.0.0.1:8000/storage/${resident.ktp_photo}`);
+    } else {
+      setPreview(null);
+    }
 
     setShowModal(true);
   };
@@ -106,10 +137,11 @@ function Residents() {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 overflow-x-auto">
-        <table className="w-full">
+        <table className="min-w-full table-auto">
           <thead>
             <tr className="border-b">
-              <th className="text-left py-3">Name</th>
+              <th className="text-left py-3 px-4">Name</th>
+              <th className="text-center">KTP</th>
               <th className="text-center">Status</th>
               <th className="text-center">Phone</th>
               <th className="text-center">Married</th>
@@ -119,28 +151,58 @@ function Residents() {
 
           <tbody>
             {residents.map((resident) => (
-              <tr key={resident.id} className="border-b">
-                <td className="py-3">{resident.full_name}</td>
+              <tr key={resident.id} className="border-b hover:bg-gray-50">
+                <td className="py-4 px-4">{resident.full_name}</td>
 
-                <td className="text-center">{resident.resident_status}</td>
+                <td className="text-center">
+                  {resident.ktp_photo ? (
+                    <img
+                      src={`http://127.0.0.1:8000/storage/${resident.ktp_photo}`}
+                      alt="KTP"
+                      className="w-20 h-12 object-cover rounded border mx-auto"
+                    />
+                  ) : (
+                    <span className="text-gray-400">No Photo</span>
+                  )}
+                </td>
+
+                <td className="text-center">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      resident.resident_status === "permanent"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {resident.resident_status}
+                  </span>
+                </td>
 
                 <td className="text-center">{resident.phone_number}</td>
 
                 <td className="text-center">
-                  {resident.is_married ? "Yes" : "No"}
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs ${
+                      resident.is_married
+                        ? "bg-blue-100 text-blue-700"
+                        : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {resident.is_married ? "Married" : "Single"}
+                  </span>
                 </td>
 
                 <td className="text-center">
                   <button
                     onClick={() => handleEdit(resident)}
-                    className="text-blue-600 hover:underline mr-4"
+                    className="text-blue-600 hover:text-blue-800 mr-4"
                   >
                     Edit
                   </button>
 
                   <button
                     onClick={() => handleDelete(resident.id)}
-                    className="text-red-600 hover:underline"
+                    className="text-red-600 hover:text-red-800"
                   >
                     Delete
                   </button>
@@ -153,7 +215,7 @@ function Residents() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-lg rounded-xl shadow-xl p-6">
+          <div className="bg-white w-full max-w-lg rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-5">
               {editingResident ? "Edit Resident" : "Add Resident"}
             </h2>
@@ -226,6 +288,36 @@ function Residents() {
                   }
                   required
                 />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">KTP Photo</label>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="w-full border rounded-lg p-2"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+
+                    setForm({
+                      ...form,
+                      ktp_photo: file,
+                    });
+
+                    if (file) {
+                      setPreview(URL.createObjectURL(file));
+                    }
+                  }}
+                />
+
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="w-52 mt-3 rounded-lg border"
+                  />
+                )}
               </div>
 
               <div className="flex items-center gap-2">
