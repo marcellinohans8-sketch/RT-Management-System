@@ -6,7 +6,7 @@ import Houses from "./pages/Houses";
 import ResidentHistories from "./pages/ResidentHistories";
 import Payments from "./pages/Payments";
 import Expenses from "./pages/Expenses";
-
+import Reports from "./pages/Reports";
 function App() {
   return (
     <Routes>
@@ -16,6 +16,7 @@ function App() {
       <Route path="/resident-histories" element={<ResidentHistories />} />
       <Route path="/payments" element={<Payments />} />
       <Route path="/expenses" element={<Expenses />} />
+      <Route path="/reports" element={<Reports />} />
     </Routes>
   );
 }
