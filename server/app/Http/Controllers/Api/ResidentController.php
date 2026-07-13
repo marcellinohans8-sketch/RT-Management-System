@@ -9,9 +9,6 @@ use App\Models\Resident;
 use Illuminate\Support\Facades\Storage;
 class ResidentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return response()->json(
@@ -19,9 +16,6 @@ class ResidentController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
 public function store(StoreResidentRequest $request)
 {
     $data = $request->validated();
@@ -49,9 +43,6 @@ public function store(StoreResidentRequest $request)
         return response()->json($resident);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
   public function update(UpdateResidentRequest $request, Resident $resident)
 {
     $data = $request->validated();
@@ -75,9 +66,6 @@ public function store(StoreResidentRequest $request)
     ]);
 }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Resident $resident)
     {
         $resident->delete();
